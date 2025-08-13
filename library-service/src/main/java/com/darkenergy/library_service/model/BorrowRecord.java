@@ -12,40 +12,79 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "borrow_records", indexes = {
     @Index(name = "idx_borrow_records_book", columnList = "book_id"),
     @Index(name = "idx_borrow_records_borrower", columnList = "borrower_id")
 })
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class BorrowRecord {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Getter @Setter 
 	private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="book_id")
-    @Getter @Setter 
     private Book book;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="borrower_id")
-    @Getter @Setter 
     private Borrower borrower;
 
     @Column(nullable=false)
-    @Getter @Setter 
     private Instant borrowedAt;
 
     @Column
-    @Getter @Setter 
     private Instant returnedAt;
+    
+    public BorrowRecord() {}
+
+	public BorrowRecord(Long id, Book book, Borrower borrower, Instant borrowedAt, Instant returnedAt) {
+		this.id = id;
+		this.book = book;
+		this.borrower = borrower;
+		this.borrowedAt = borrowedAt;
+		this.returnedAt = returnedAt;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Book getBook() {
+		return book;
+	}
+
+	public Borrower getBorrower() {
+		return borrower;
+	}
+
+	public Instant getBorrowedAt() {
+		return borrowedAt;
+	}
+
+	public Instant getReturnedAt() {
+		return returnedAt;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
+	public void setBorrower(Borrower borrower) {
+		this.borrower = borrower;
+	}
+
+	public void setBorrowedAt(Instant borrowedAt) {
+		this.borrowedAt = borrowedAt;
+	}
+
+	public void setReturnedAt(Instant returnedAt) {
+		this.returnedAt = returnedAt;
+	}
 }

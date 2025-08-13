@@ -2,25 +2,64 @@ package com.darkenergy.library_service.dto;
 
 import java.time.Instant;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class ReturnResponseDTO {
-	@Getter @Setter 
 	private Long recordId;
-	@Getter @Setter 
 	private Long bookId;
-	@Getter @Setter 
 	private Long borrowerId;
-	@Getter @Setter 
 	private Instant borrowedAt;
-	@Getter @Setter 
 	private Instant returnedAt;
+	
+	public ReturnResponseDTO() {}
+
+	public ReturnResponseDTO(Long recordId, Long bookId, Long borrowerId, Instant borrowedAt, Instant returnedAt) {
+		this.recordId = recordId;
+		this.bookId = bookId;
+		this.borrowerId = borrowerId;
+		this.borrowedAt = borrowedAt;
+		this.returnedAt = returnedAt;
+	}
+
+	public Long getRecordId() {
+		return recordId;
+	}
+
+	public void setRecordId(Long recordId) {
+		this.recordId = recordId;
+	}
+
+	public Long getBookId() {
+		return bookId;
+	}
+
+	public void setBookId(Long bookId) {
+		this.bookId = bookId;
+	}
+
+	public Long getBorrowerId() {
+		return borrowerId;
+	}
+
+	public void setBorrowerId(Long borrowerId) {
+		this.borrowerId = borrowerId;
+	}
+
+	public Instant getBorrowedAt() {
+		return borrowedAt;
+	}
+
+	public void setBorrowedAt(Instant borrowedAt) {
+		this.borrowedAt = borrowedAt;
+	}
+
+	public Instant getReturnedAt() {
+		return returnedAt;
+	}
+
+	public void setReturnedAt(Instant returnedAt) {
+		this.returnedAt = returnedAt;
+	}
 
 }
