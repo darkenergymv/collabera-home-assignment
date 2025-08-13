@@ -8,16 +8,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "books", indexes = {
 	    @Index(name = "idx_books_isbn", columnList = "isbn")
 	})
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class Book {
 	@Id
@@ -35,6 +31,15 @@ public class Book {
 	
 	@Version
 	private Long version; // optional optimistic fallback
+
+	public Book() {}
+
+	public Book(Long id, String isbn, String title, String author) {
+		this.id = id;
+		this.isbn = isbn;
+		this.title = title;
+		this.author = author;
+	}
 
 	public Long getId() {
 		return id;
