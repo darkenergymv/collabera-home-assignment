@@ -25,6 +25,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-library:5432/LibraryDB
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: welcome@123
+      SPRING_PROFILES_ACTIVE: dev
     ports:
       - "8081:8081"
     networks:

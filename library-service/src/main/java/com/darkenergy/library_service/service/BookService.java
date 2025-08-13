@@ -1,6 +1,7 @@
 package com.darkenergy.library_service.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,10 @@ public class BookService {
 				.stream()
 				.map(AppUtils::modelToDto)
 				.toList();
+	}
+
+	public Optional<Book> findById(long l) {
+		return bookRepository.findById(l);
 	}
 
 }
