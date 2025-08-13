@@ -1,0 +1,39 @@
+services:
+
+  postgres-library:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: LibraryDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: welcome@123
+    ports:
+      - "5432:5432"
+    volumes:
+      - library_system_data:/var/lib/postgresql/data
+    networks:
+      - infra_network
+
+  library-service:
+    build:
+      context: ../library-service  # Path to your service source code
+      dockerfile: Dockerfile       # Explicit Dockerfile name
+      args:                        # Optional: build arguments if needed
+        MAVEN_OPTS: "-Dmaven.repo.local=/root/.m2/repository"
+    depends_on:
+      - postgres-library
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-library:5432/LibraryDB
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: welcome@123
+    ports:
+      - "8081:8081"
+    networks:
+      - infra_network
+
+networks:
+  infra_network:
+    name: library_system_infra_network
+    driver: bridge
+
+volumes:
+  library_system_data:
