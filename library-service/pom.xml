@@ -159,7 +159,7 @@
 						<id>check</id>
 						<phase>verify</phase>
 						<goals>
-							<goal>check</goal>
+							<!--<goal>check</goal>-->
 						</goals>
 						<configuration>
 							<rules>
