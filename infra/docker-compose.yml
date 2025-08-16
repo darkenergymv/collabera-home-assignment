@@ -1,11 +1,10 @@
 services:
 
-  postgres-library:
+  db:
     image: postgres:16
-    environment:
-      POSTGRES_DB: LibraryDB
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: welcome@123
+    container_name: library-postgres
+    env_file:
+      - ../.env
     ports:
       - "5432:5432"
     volumes:
@@ -14,18 +13,12 @@ services:
       - infra_network
 
   library-service:
-    build:
-      context: ../library-service  # Path to your service source code
-      dockerfile: Dockerfile       # Explicit Dockerfile name
-      args:                        # Optional: build arguments if needed
-        MAVEN_OPTS: "-Dmaven.repo.local=/root/.m2/repository"
+    image: ghcr.io/darkenergymv/library-app:latest
+    container_name: library-app
     depends_on:
-      - postgres-library
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-library:5432/LibraryDB
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: welcome@123
-      SPRING_PROFILES_ACTIVE: dev
+      - db
+    env_file:
+      - ../.env
     ports:
       - "8081:8081"
     networks:
