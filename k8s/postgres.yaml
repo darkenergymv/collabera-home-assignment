@@ -1,24 +1,19 @@
 apiVersion: v1
-kind: Secret
+kind: PersistentVolumeClaim
 metadata:
-  name: postgres-secret
-type: Opaque
-data:
-  # Base64 encode: echo -n 'welcome@123' | base64
-  POSTGRES_PASSWORD: d2VsY29tZUAxMjM=
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: postgres-config
-data:
-  POSTGRES_DB: LibraryDB
-  POSTGRES_USER: postgres
+  name: postgres-pvc
+  namespace: library-system
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  resources:
+    requests:
+      storage: 1Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
+  namespace: library-system
 spec:
   replicas: 1
   selector:
@@ -32,6 +27,7 @@ spec:
       containers:
         - name: postgres
           image: postgres:16
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
           envFrom:
@@ -40,19 +36,22 @@ spec:
             - secretRef:
                 name: postgres-secret
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: postgres-storage
+            - name: data
+              mountPath: /var/lib/postgresql/data
       volumes:
-        - name: postgres-storage
-          emptyDir: {}
+        - name: data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: postgres
+  namespace: library-system
 spec:
   type: ClusterIP
-  ports:
-    - port: 5432
   selector:
     app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432

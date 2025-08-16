@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: library-app
+  namespace: library-system
 spec:
   replicas: 1
   selector:
@@ -15,15 +16,15 @@ spec:
       initContainers:
         - name: wait-for-postgres
           image: busybox
-          command: ['sh', '-c', 'until nc -z postgres 5432; do echo "Waiting for Postgres..."; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z postgres 5432; do echo "waiting for postgres..."; sleep 2; done;']
       containers:
         - name: library-app
-          # --- LOCAL DEVELOPMENT ---
+          # --- LOCAL DEVELOPMENT (default) ---
           # Use local Docker image; won't try to pull from registry
           image: library-app:latest
           imagePullPolicy: Never
 
-          # --- FOR CI/CD LATER ---
+          # --- FOR GHCR or CI/CD LATER ---
           # When ready for GitHub Actions, comment out above 2 lines
           # and uncomment these:
           # image: ghcr.io/darkenergymv/library-app:latest
@@ -32,6 +33,9 @@ spec:
           ports:
             - containerPort: 8081
           env:
+            # use dev profile so the app listens on 8081 (from application-dev.yml)
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://postgres:5432/LibraryDB
             - name: SPRING_DATASOURCE_USERNAME
@@ -44,17 +48,17 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
-            - name: SPRING_PROFILES_ACTIVE
-              value: dev
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: library-app
+  namespace: library-system
 spec:
   type: NodePort
-  ports:
-    - port: 8081
-      nodePort: 30081
   selector:
     app: library-app
+  ports:
+    - port: 8081
+      targetPort: 8081
+      nodePort: 30081
