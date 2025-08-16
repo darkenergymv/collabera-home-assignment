@@ -24,6 +24,7 @@ jobs:
           cache: maven
 
       - name: Build & test (Maven)
+        working-directory: ./library-service
         run: mvn -B -ntp clean verify
 
       - name: Set up Docker Buildx
