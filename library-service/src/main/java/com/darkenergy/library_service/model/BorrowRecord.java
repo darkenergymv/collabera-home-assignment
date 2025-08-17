@@ -13,12 +13,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
+import lombok.Data;
 
 @Entity
 @Table(name = "borrow_records", indexes = {
     @Index(name = "idx_borrow_records_book", columnList = "book_id"),
     @Index(name = "idx_borrow_records_borrower", columnList = "borrower_id")
 })
+@Data
 @Builder
 public class BorrowRecord {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,46 +47,6 @@ public class BorrowRecord {
 		this.book = book;
 		this.borrower = borrower;
 		this.borrowedAt = borrowedAt;
-		this.returnedAt = returnedAt;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public Book getBook() {
-		return book;
-	}
-
-	public Borrower getBorrower() {
-		return borrower;
-	}
-
-	public Instant getBorrowedAt() {
-		return borrowedAt;
-	}
-
-	public Instant getReturnedAt() {
-		return returnedAt;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setBook(Book book) {
-		this.book = book;
-	}
-
-	public void setBorrower(Borrower borrower) {
-		this.borrower = borrower;
-	}
-
-	public void setBorrowedAt(Instant borrowedAt) {
-		this.borrowedAt = borrowedAt;
-	}
-
-	public void setReturnedAt(Instant returnedAt) {
 		this.returnedAt = returnedAt;
 	}
 }
