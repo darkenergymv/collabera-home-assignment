@@ -25,11 +25,6 @@ public class BorrowerService {
 		this.borrowerRepository = borrowerRepository;
 	}
 	
-	public void borrow() {
-		log.info("DE: BorrowerService -> borrow(): executed...");
-		borrowerRepository.count();
-	}
-	
 	@Transactional
 	public BorrowerResponseDTO registerBorrower(@Valid BorrowerRequestDTO request) {
 		log.info("DE: BorrowerService -> registerBorrower(): method executed...");
